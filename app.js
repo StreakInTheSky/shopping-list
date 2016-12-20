@@ -26,14 +26,15 @@ function main() {
 		state.items.push(newObject);
 	}
 
-	function deleteItem(state, item) {
-		$(item).remove();
-	}
-
 	function attachEventHandlers() {
-		$('.shopping-item-delete').click(function(event) {
+		$('.shopping-list').on('click', '.shopping-item-delete', function(event) {
 			var deleteIndex = $(event.target).closest('li').index();
 			state.items.splice(deleteIndex, 1);
+			renderList(state, $('.shopping-list'));
+		})
+		$('.shopping-list').on('click', '.shopping-item-toggle', function(event) {
+			var checkIndex = $(event.target).closest('li').index();
+			state.items[checkIndex].checked = !state.items[checkIndex].checked;
 			renderList(state, $('.shopping-list'));
 		})
 	}
@@ -43,6 +44,7 @@ function main() {
 		event.preventDefault();
 		addItem(state, $('input[name=shopping-list-entry]').val());
 		renderList(state, $('.shopping-list'));
+		$('input[name=shopping-list-entry]').val(''); 
 		})
 	}
 
@@ -62,7 +64,6 @@ function main() {
 		});
 
 		element.html(itemsHTML);
-		attachEventHandlers();
 	};
 
 	//run on startup
